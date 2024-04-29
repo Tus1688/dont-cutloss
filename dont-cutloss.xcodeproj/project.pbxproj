@@ -16,6 +16,9 @@
 		CE42EC5B2BDB56FF0025779D /* dont_cutlossTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC5A2BDB56FF0025779D /* dont_cutlossTests.swift */; };
 		CE42EC652BDB56FF0025779D /* dont_cutlossUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC642BDB56FF0025779D /* dont_cutlossUITests.swift */; };
 		CE42EC672BDB56FF0025779D /* dont_cutlossUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC662BDB56FF0025779D /* dont_cutlossUITestsLaunchTests.swift */; };
+		CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC732BDB5D940025779D /* AddNewItem.swift */; };
+		CE42EC772BDB5E5D0025779D /* yfinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC762BDB5E5D0025779D /* yfinance.swift */; };
+		CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC7D2BDF2D240025779D /* Datatype.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,9 @@
 		CE42EC602BDB56FF0025779D /* dont-cutlossUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "dont-cutlossUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE42EC642BDB56FF0025779D /* dont_cutlossUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dont_cutlossUITests.swift; sourceTree = "<group>"; };
 		CE42EC662BDB56FF0025779D /* dont_cutlossUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dont_cutlossUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CE42EC732BDB5D940025779D /* AddNewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewItem.swift; sourceTree = "<group>"; };
+		CE42EC762BDB5E5D0025779D /* yfinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yfinance.swift; sourceTree = "<group>"; };
+		CE42EC7D2BDF2D240025779D /* Datatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Datatype.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,12 +104,14 @@
 		CE42EC432BDB56FE0025779D /* dont-cutloss */ = {
 			isa = PBXGroup;
 			children = (
+				CE42EC752BDB5E460025779D /* financialData */,
 				CE42EC442BDB56FE0025779D /* dont_cutlossApp.swift */,
 				CE42EC462BDB56FE0025779D /* ContentView.swift */,
 				CE42EC482BDB56FF0025779D /* Assets.xcassets */,
 				CE42EC4D2BDB56FF0025779D /* Persistence.swift */,
 				CE42EC4F2BDB56FF0025779D /* dont_cutloss.xcdatamodeld */,
 				CE42EC4A2BDB56FF0025779D /* Preview Content */,
+				CE42EC732BDB5D940025779D /* AddNewItem.swift */,
 			);
 			path = "dont-cutloss";
 			sourceTree = "<group>";
@@ -133,6 +141,15 @@
 			path = "dont-cutlossUITests";
 			sourceTree = "<group>";
 		};
+		CE42EC752BDB5E460025779D /* financialData */ = {
+			isa = PBXGroup;
+			children = (
+				CE42EC762BDB5E5D0025779D /* yfinance.swift */,
+				CE42EC7D2BDF2D240025779D /* Datatype.swift */,
+			);
+			path = financialData;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -149,6 +166,8 @@
 			dependencies = (
 			);
 			name = "dont-cutloss";
+			packageProductDependencies = (
+			);
 			productName = "dont-cutloss";
 			productReference = CE42EC412BDB56FE0025779D /* dont-cutloss.app */;
 			productType = "com.apple.product-type.application";
@@ -196,6 +215,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1530;
 				TargetAttributes = {
@@ -221,6 +243,8 @@
 				Base,
 			);
 			mainGroup = CE42EC382BDB56FE0025779D;
+			packageReferences = (
+			);
 			productRefGroup = CE42EC422BDB56FE0025779D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -263,9 +287,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */,
+				CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */,
 				CE42EC4E2BDB56FF0025779D /* Persistence.swift in Sources */,
 				CE42EC472BDB56FE0025779D /* ContentView.swift in Sources */,
 				CE42EC512BDB56FF0025779D /* dont_cutloss.xcdatamodeld in Sources */,
+				CE42EC772BDB5E5D0025779D /* yfinance.swift in Sources */,
 				CE42EC452BDB56FE0025779D /* dont_cutlossApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
