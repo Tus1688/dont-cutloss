@@ -43,20 +43,31 @@ public class YFinance {
         session.dataTask(with: URL(string: "https://finance.yahoo.com/quote/AAPL/history")!) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
-            } else if let data = data {
-                let dataString = String(data: data, encoding: .utf8)!
-                let crumbRegex = try! NSRegularExpression(pattern: "\"CrumbStore\":\\{\"crumb\":\"([^\"]+)\"\\}")
-                let cookiesRegex = try! NSRegularExpression(pattern: "B=([a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+)")
-                
-                let crumbMatch = crumbRegex
-                    .firstMatch(in: dataString, range: NSRange(dataString.startIndex..., in: dataString))
-                crumb = String(dataString[Range(crumbMatch!.range(at: 1), in: dataString)!])
-                
-                let cookiesMatch = cookiesRegex
-                    .firstMatch(in: dataString, range: NSRange(dataString.startIndex..., in: dataString))
-                cookies = String(dataString[Range(cookiesMatch!.range(at: 1), in: dataString)!])
+                return
             }
-            semaphore.signal()
+            defer { semaphore.signal() }
+            
+            Self.cookies = response.debugDescription
+                .split(separator: ";")
+                .map { String($0) }
+                .filter { $0.contains("B=") }
+                .joined(separator: ";")
+            
+            let data = String(data: data!, encoding: .utf8)!
+            let crumbPattern = #""CrumbStore":\{"crumb":"(?<crumb>[^"]+)"\}"#
+            let range = NSRange(location: 0, length: data.utf16.count)
+            guard let regex = try? NSRegularExpression(pattern: crumbPattern),
+                  let match = regex.firstMatch(in: data, range: range),
+                  let rangeData = Range(match.range, in: data) else {
+                return
+            }
+            let crumbString = String(data[rangeData])
+            
+            let wI = NSMutableString(string: crumbString)
+            CFStringTransform(wI, nil, "Any-Hex/Java" as NSString, true)
+            let decodedString = wI as String
+            Self.crumb = String(decodedString.suffix(13).prefix(11))
+            
         }.resume()
         
         semaphore.wait()

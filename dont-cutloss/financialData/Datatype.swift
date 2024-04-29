@@ -13,11 +13,11 @@ public struct FinanceQuoteResultResponse: Decodable {
     public var quotes: [FinanceQuoteSearchResult]?
 }
 
-//Instance method 'decode(_:from:)' requires that 'FinanceQuoteSearchResult' conform to 'Decodable'
 public struct FinanceQuoteSearchResult: Decodable {
     public var symbol: String?
-    public var shortName: String?
-    public var longName: String?
+    public var shortname: String?
+    public var longname: String?
+    public var quoteType: String?
     public var exchange: String?
-    public var assetType: String?
+    public var sector: String?
 }

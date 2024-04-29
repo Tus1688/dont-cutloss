@@ -19,6 +19,7 @@
 		CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC732BDB5D940025779D /* AddNewItem.swift */; };
 		CE42EC772BDB5E5D0025779D /* yfinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC762BDB5E5D0025779D /* yfinance.swift */; };
 		CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC7D2BDF2D240025779D /* Datatype.swift */; };
+		CE42EC832BDF52390025779D /* StockCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC822BDF52390025779D /* StockCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		CE42EC732BDB5D940025779D /* AddNewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNewItem.swift; sourceTree = "<group>"; };
 		CE42EC762BDB5E5D0025779D /* yfinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yfinance.swift; sourceTree = "<group>"; };
 		CE42EC7D2BDF2D240025779D /* Datatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Datatype.swift; sourceTree = "<group>"; };
+		CE42EC822BDF52390025779D /* StockCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 		CE42EC432BDB56FE0025779D /* dont-cutloss */ = {
 			isa = PBXGroup;
 			children = (
+				CE42EC7F2BDF42110025779D /* createNew */,
 				CE42EC752BDB5E460025779D /* financialData */,
 				CE42EC442BDB56FE0025779D /* dont_cutlossApp.swift */,
 				CE42EC462BDB56FE0025779D /* ContentView.swift */,
@@ -111,7 +114,6 @@
 				CE42EC4D2BDB56FF0025779D /* Persistence.swift */,
 				CE42EC4F2BDB56FF0025779D /* dont_cutloss.xcdatamodeld */,
 				CE42EC4A2BDB56FF0025779D /* Preview Content */,
-				CE42EC732BDB5D940025779D /* AddNewItem.swift */,
 			);
 			path = "dont-cutloss";
 			sourceTree = "<group>";
@@ -148,6 +150,15 @@
 				CE42EC7D2BDF2D240025779D /* Datatype.swift */,
 			);
 			path = financialData;
+			sourceTree = "<group>";
+		};
+		CE42EC7F2BDF42110025779D /* createNew */ = {
+			isa = PBXGroup;
+			children = (
+				CE42EC732BDB5D940025779D /* AddNewItem.swift */,
+				CE42EC822BDF52390025779D /* StockCard.swift */,
+			);
+			path = createNew;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +298,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE42EC832BDF52390025779D /* StockCard.swift in Sources */,
 				CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */,
 				CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */,
 				CE42EC4E2BDB56FF0025779D /* Persistence.swift in Sources */,
