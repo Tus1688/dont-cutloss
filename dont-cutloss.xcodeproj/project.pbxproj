@@ -20,6 +20,7 @@
 		CE42EC772BDB5E5D0025779D /* yfinance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC762BDB5E5D0025779D /* yfinance.swift */; };
 		CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC7D2BDF2D240025779D /* Datatype.swift */; };
 		CE42EC832BDF52390025779D /* StockCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC822BDF52390025779D /* StockCard.swift */; };
+		CE42EC852BDF9DC70025779D /* FillInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC842BDF9DC60025779D /* FillInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		CE42EC762BDB5E5D0025779D /* yfinance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = yfinance.swift; sourceTree = "<group>"; };
 		CE42EC7D2BDF2D240025779D /* Datatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Datatype.swift; sourceTree = "<group>"; };
 		CE42EC822BDF52390025779D /* StockCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockCard.swift; sourceTree = "<group>"; };
+		CE42EC842BDF9DC60025779D /* FillInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInfo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 			children = (
 				CE42EC732BDB5D940025779D /* AddNewItem.swift */,
 				CE42EC822BDF52390025779D /* StockCard.swift */,
+				CE42EC842BDF9DC60025779D /* FillInfo.swift */,
 			);
 			path = createNew;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */,
 				CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */,
 				CE42EC4E2BDB56FF0025779D /* Persistence.swift in Sources */,
+				CE42EC852BDF9DC70025779D /* FillInfo.swift in Sources */,
 				CE42EC472BDB56FE0025779D /* ContentView.swift in Sources */,
 				CE42EC512BDB56FF0025779D /* dont_cutloss.xcdatamodeld in Sources */,
 				CE42EC772BDB5E5D0025779D /* yfinance.swift in Sources */,

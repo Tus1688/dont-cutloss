@@ -18,11 +18,14 @@ struct AddNewItem: View {
         NavigationStack {
             VStack {
                 TextField("Search for a symbol", text: $searchString, onCommit: self.searchObjects)
-                    .textFieldStyle(.roundedBorder)
                     .padding()
                 List {
                     ForEach(self.foundContainers, id: \.symbol) { result in
-                        StockCard(result: result)
+                        NavigationLink(destination:
+                                        FillInfo(isPresented: $isPresented, result: result)
+                        ) {
+                            StockCard(result: result)
+                        }
                     }
                 }
                 .listStyle(.plain)
