@@ -44,7 +44,7 @@ struct AddNewItem: View {
     
     func searchObjects() {
         isLoading = true
-        YFinance.fetchSearchSymbol(searchTerm: self.searchString) {data, error in
+        YFinance.fetchSearchDataBy(searchTerm: self.searchString) {data, error in
             isLoading = false
             if error != nil {
                 return

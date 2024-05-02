@@ -16,60 +16,79 @@ public class YFinance {
     static var cacheCounter = 0
     
     static var headers = [
-        "Accept": "*/*",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-Mode": "navigate",
         "Pragma": "no-cache",
         "Origin": "https://finance.yahoo.com",
         "Cache-Control": "no-cache",
-        // "Host": "query1.finance.yahoo.com"
-        // most commont user agent by now
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.3",
         "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
         "Connection": "keep-alive",
-        // "Referer": "https://finance.yahoo.com/quote/AAPL/history?p=AAPL",
-        // "Referer": "https://finance.yahoo.com",
+        "Sec-Fetch-Dest": "document",
     ]
     
     static var session: URLSession = {
-        let configuration = URLSessionConfiguration.default
-        configuration.httpShouldSetCookies = false
-        configuration.httpCookieAcceptPolicy = .never
-        return URLSession(configuration: configuration)
+        let config = URLSessionConfiguration.default
+        config.httpAdditionalHeaders = headers
+        config.httpCookieStorage = .shared
+        config.httpShouldSetCookies = true
+        config.httpCookieAcceptPolicy = .always
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        return URLSession(configuration: config)
     }()
+    
     
     private class func fetchCredentials() {
         let semaphore = DispatchSemaphore(value: 0)
         
-        session.dataTask(with: URL(string: "https://finance.yahoo.com/quote/AAPL/history")!) { data, response, error in
+        // Send the first request to https://finance.yahoo.com/quote/AAPL/history
+        session.dataTask(with: URL(string: "https://finance.yahoo.com/quote/AAPL")!) { data, response, error in
             if let error = error {
                 print("Error: \(error)")
                 return
             }
             defer { semaphore.signal() }
             
-            Self.cookies = response.debugDescription
-                .split(separator: ";")
-                .map { String($0) }
-                .filter { $0.contains("B=") }
-                .joined(separator: ";")
+            let resp: HTTPURLResponse = (response as? HTTPURLResponse)!
+            let cookies:[HTTPCookie] = HTTPCookie.cookies(withResponseHeaderFields: resp.allHeaderFields as! [String : String], for: resp.url!)
+            HTTPCookieStorage.shared.setCookies(cookies, for: response?.url!, mainDocumentURL: nil)
             
-            let data = String(data: data!, encoding: .utf8)!
-            let crumbPattern = #""CrumbStore":\{"crumb":"(?<crumb>[^"]+)"\}"#
-            let range = NSRange(location: 0, length: data.utf16.count)
-            guard let regex = try? NSRegularExpression(pattern: crumbPattern),
-                  let match = regex.firstMatch(in: data, range: range),
-                  let rangeData = Range(match.range, in: data) else {
-                return
+            Self.cookies = cookies.reduce("") { (result, cookie) -> String in
+                return "\(result)\(cookie.name)=\(cookie.value);"
             }
-            let crumbString = String(data[rangeData])
-            
-            let wI = NSMutableString(string: crumbString)
-            CFStringTransform(wI, nil, "Any-Hex/Java" as NSString, true)
-            let decodedString = wI as String
-            Self.crumb = String(decodedString.suffix(13).prefix(11))
-            
         }.resume()
         
+        // Wait for the first request to finish
+        semaphore.wait()
+        
+        var reqGetCrumb = URLRequest(url: URL(string: "https://query1.finance.yahoo.com/v1/test/getcrumb")!)
+        reqGetCrumb.setValue(Self.cookies, forHTTPHeaderField: "Cookie")
+        reqGetCrumb.setValue("text/plain", forHTTPHeaderField: "Content-Type")
+        reqGetCrumb.setValue("same-site", forHTTPHeaderField: "Sec-Fetch-Site")
+        reqGetCrumb.setValue("gzip, deflate, br", forHTTPHeaderField: "Accept-Encoding")
+        reqGetCrumb.setValue("en-GB,en-US;q=0.9,en;q=0.8", forHTTPHeaderField: "Accept-Language")
+        reqGetCrumb.setValue("cors", forHTTPHeaderField: "Sec-Fetch-Mode")
+        reqGetCrumb.setValue("query1.finance.yahoo.com", forHTTPHeaderField: "Host")
+        reqGetCrumb.setValue("https://finance.yahoo.com", forHTTPHeaderField: "Origin")
+        reqGetCrumb.setValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4.1 Safari/605.1.15", forHTTPHeaderField: "User-Agent")
+        reqGetCrumb.setValue("https://finance.yahoo.com/quote/AAPL/", forHTTPHeaderField: "Referer")
+        reqGetCrumb.setValue("keep-alive", forHTTPHeaderField: "Connection")
+        
+        // Send the second request to https://query1.finance.yahoo.com/v1/test/getcrumb
+        session.dataTask(with: reqGetCrumb) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+            }
+            defer { semaphore.signal() }
+            
+            Self.crumb = String(data: data!, encoding: .utf8)!
+            print("DEBUG Crumb: \(Self.crumb)")
+        }.resume()
+        
+        // Wait for the second request to finish
         semaphore.wait()
     }
     
@@ -80,7 +99,8 @@ public class YFinance {
         }
     }
     
-    public class func fetchSearchSymbol(
+    // fetch symbols
+    public class func fetchSearchDataBy(
         searchTerm: String,
         quotesCount: Int = 20,
         queue: DispatchQueue = .main,
@@ -122,6 +142,137 @@ public class YFinance {
                     let searchResult = try decoder.decode(FinanceQuoteResultResponse.self, from: data)
                     queue.async {
                         callback(searchResult.quotes, nil)
+                    }
+                } catch {
+                    queue.async {
+                        callback(nil, error)
+                    }
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
+    // fetch news
+    public class func fetchSearchDataBy(
+        searchTerm: String,
+        newsCount: Int = 20,
+        queue: DispatchQueue = .main,
+        callback: @escaping ([FinanceNewsSearchResult]?, Error?) -> Void
+    ) {
+        //    https:query1.finance.yahoo.com/v1/finance/search
+        
+        if searchTerm.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            callback([], nil)
+        }
+        
+        Self.prepareCredentials()
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "query1.finance.yahoo.com"
+        urlComponents.path = "/v1/finance/search"
+        Self.cacheCounter += 1
+        
+        urlComponents.queryItems = [
+            URLQueryItem(name: "q", value: searchTerm),
+            URLQueryItem(name: "lang", value: "en-US"),
+            URLQueryItem(name: "crumb", value: Self.crumb),
+            URLQueryItem(name: "newsCount", value: String(newsCount)),
+            URLQueryItem(name: "cachecounter", value: String(Self.cacheCounter))
+        ]
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let task = session.dataTask(with: urlComponents.url!) { data, response, error in
+            if let error = error {
+                queue.async {
+                    callback(nil, error)
+                }
+            } else if let data = data {
+                let decoder = JSONDecoder()
+                do {
+                    let searchResult = try decoder.decode(FinanceNewsSearchResultResponse.self, from: data)
+                    queue.async {
+                        callback(searchResult.news, nil)
+                    }
+                } catch {
+                    queue.async {
+                        callback(nil, error)
+                    }
+                }
+            }
+        }
+        
+        task.resume()
+    }
+    
+    // fetch summary data
+    public class func fetchSummaryData(
+        identifier: String,
+        selection: [QuoteSummarySelection],
+        queue: DispatchQueue = .main,
+        callback: @escaping(FinanceSummaryDetailResult?, Error?) -> Void
+    ) {
+        if identifier.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            callback(nil, NSError(domain: "invalid identifier", code: 0, userInfo: nil))
+            return
+        }
+        
+        Self.prepareCredentials()
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "query2.finance.yahoo.com"
+        urlComponents.path = "/v10/finance/quoteSummary/\(identifier)"
+        
+        Self.cacheCounter += 1
+        
+        urlComponents.queryItems = [
+            URLQueryItem(name: "modules", value: selection.map({
+                data in
+                String(data.rawValue)
+            }).joined(separator: ",")),
+            URLQueryItem(name: "lang", value: "en-US"),
+            URLQueryItem(name: "region", value: "US"),
+            URLQueryItem(name: "crumb", value: Self.crumb),
+            URLQueryItem(name: "includePrePost", value: "true"),
+            URLQueryItem(name: "corsDomain", value: "finance.yahoo.com"),
+            URLQueryItem(name: ".tsrc", value: "finance"),
+            URLQueryItem(name: "symbols", value: identifier),
+            URLQueryItem(name: "cachecounter", value: String(Self.cacheCounter))
+        ]
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let task = session.dataTask(with: urlComponents.url!) { data, response, error in
+            if let error = error {
+                queue.async {
+                    callback(nil, error)
+                }
+            } else if let data = data {
+                let decoder = JSONDecoder()
+                do {
+                    let response = try decoder.decode(FinanceSummaryDetailResultResponse.self, from: data)
+                    let error = try decoder.decode(FinanceSummaryDetailErrorResponse.self, from: data)
+                    
+                    if error.finance?.error != nil {
+                        queue.async {
+                            callback(nil, NSError(domain: error.finance!.error?.description! ?? "", code: 0, userInfo: nil))
+                        }
+                    }
+                    
+                    if response.result != nil {
+                        queue.async {
+                            callback(response.result![0], nil)
+                        }
+                    } else {
+                        queue.async {
+                            callback(nil, NSError(domain: "no data", code: 0, userInfo: nil))
+                        }
                     }
                 } catch {
                     queue.async {

@@ -18,9 +18,14 @@ struct PersistenceController {
             let newPortfolio = Portfolio(context: viewContext)
             newPortfolio.id = UUID()
             newPortfolio.symbol = "AAPL"
+            newPortfolio.sector = "Technology"
+            newPortfolio.exchange = "NASDAQ"
+            newPortfolio.shortName = "Apple Inc."
+            newPortfolio.quoteType = "EQUITY"
             newPortfolio.timestamp = Date()
             newPortfolio.averagePrice = 900
             newPortfolio.quantity = 10
+            
         }
         do {
             try viewContext.save()

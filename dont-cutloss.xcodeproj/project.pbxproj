@@ -21,6 +21,8 @@
 		CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC7D2BDF2D240025779D /* Datatype.swift */; };
 		CE42EC832BDF52390025779D /* StockCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC822BDF52390025779D /* StockCard.swift */; };
 		CE42EC852BDF9DC70025779D /* FillInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC842BDF9DC60025779D /* FillInfo.swift */; };
+		CE42EC872BE09C2C0025779D /* config.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC862BE09C2C0025779D /* config.swift */; };
+		CE42EC8A2BE320ED0025779D /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC892BE320ED0025779D /* DetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		CE42EC7D2BDF2D240025779D /* Datatype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Datatype.swift; sourceTree = "<group>"; };
 		CE42EC822BDF52390025779D /* StockCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockCard.swift; sourceTree = "<group>"; };
 		CE42EC842BDF9DC60025779D /* FillInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FillInfo.swift; sourceTree = "<group>"; };
+		CE42EC862BE09C2C0025779D /* config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = config.swift; sourceTree = "<group>"; };
+		CE42EC892BE320ED0025779D /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 		CE42EC432BDB56FE0025779D /* dont-cutloss */ = {
 			isa = PBXGroup;
 			children = (
+				CE42EC882BE320DB0025779D /* detail */,
 				CE42EC7F2BDF42110025779D /* createNew */,
 				CE42EC752BDB5E460025779D /* financialData */,
 				CE42EC442BDB56FE0025779D /* dont_cutlossApp.swift */,
@@ -150,6 +155,7 @@
 			children = (
 				CE42EC762BDB5E5D0025779D /* yfinance.swift */,
 				CE42EC7D2BDF2D240025779D /* Datatype.swift */,
+				CE42EC862BE09C2C0025779D /* config.swift */,
 			);
 			path = financialData;
 			sourceTree = "<group>";
@@ -162,6 +168,14 @@
 				CE42EC842BDF9DC60025779D /* FillInfo.swift */,
 			);
 			path = createNew;
+			sourceTree = "<group>";
+		};
+		CE42EC882BE320DB0025779D /* detail */ = {
+			isa = PBXGroup;
+			children = (
+				CE42EC892BE320ED0025779D /* DetailView.swift */,
+			);
+			path = detail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,7 +318,9 @@
 				CE42EC832BDF52390025779D /* StockCard.swift in Sources */,
 				CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */,
 				CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */,
+				CE42EC872BE09C2C0025779D /* config.swift in Sources */,
 				CE42EC4E2BDB56FF0025779D /* Persistence.swift in Sources */,
+				CE42EC8A2BE320ED0025779D /* DetailView.swift in Sources */,
 				CE42EC852BDF9DC70025779D /* FillInfo.swift in Sources */,
 				CE42EC472BDB56FE0025779D /* ContentView.swift in Sources */,
 				CE42EC512BDB56FF0025779D /* dont_cutloss.xcdatamodeld in Sources */,

@@ -23,7 +23,7 @@ struct ContentView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter) \(item.symbol!)")
+                        DetailView(symbol: item)
                     } label: {
                         Text(item.timestamp!, formatter: itemFormatter)
                         Text(item.symbol!)
