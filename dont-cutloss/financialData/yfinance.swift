@@ -256,7 +256,7 @@ public class YFinance {
             } else if let data = data {
                 let decoder = JSONDecoder()
                 do {
-                    let response = try decoder.decode(FinanceSummaryDetailResultResponse.self, from: data)
+                    let response = try decoder.decode(FinanceSummaryDetailResultReponse.self, from: data)
                     let error = try decoder.decode(FinanceSummaryDetailErrorResponse.self, from: data)
                     
                     if error.finance?.error != nil {
@@ -265,14 +265,14 @@ public class YFinance {
                         }
                     }
                     
-                    if response.result != nil {
-                        queue.async {
-                            callback(response.result![0], nil)
-                        }
-                    } else {
+                    if response.quoteSummary?.result == nil {
                         queue.async {
                             callback(nil, NSError(domain: "no data", code: 0, userInfo: nil))
                         }
+                    }
+                    
+                    queue.async {
+                        callback(response.quoteSummary?.result![0], nil)
                     }
                 } catch {
                     queue.async {

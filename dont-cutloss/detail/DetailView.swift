@@ -12,7 +12,7 @@ struct DetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.dismiss) var dismiss
     
-    let symbol: Portfolio
+    let ticker: Portfolio
     
     @State private var data: FinanceSummaryDetailResult = FinanceSummaryDetailResult()
     
@@ -36,14 +36,14 @@ struct DetailView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     VStack(alignment: .leading) {
-                        Text(symbol.shortName ?? "")
+                        Text(ticker.shortName ?? "")
                             .font(.callout)
                             .fontWeight(.bold)
                         HStack (spacing: 4) {
-                            Text(symbol.quoteType ?? "")
+                            Text(ticker.quoteType ?? "")
                                 .font(.caption2)
                                 .foregroundColor(.gray)
-                            Text(symbol.exchange ?? "")
+                            Text(ticker.exchange ?? "")
                                 .font(.caption2)
                                 .foregroundColor(.gray)
                         }
@@ -75,12 +75,12 @@ struct DetailView: View {
     }
     
     private func loadData() {
-        YFinance.fetchSummaryData(identifier: symbol.symbol ?? "", selection: [QuoteSummarySelection.supported]) { data, err in
+        YFinance.fetchSummaryData(identifier: ticker.symbol ?? "", selection: [QuoteSummarySelection.supported]) { respData, err in
             if err != nil {
-//                print(err)
+                print("error: \(err!)")
                 return
             }
-//            print(data)
+            data = respData!
         }
     }
 }

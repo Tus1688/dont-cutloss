@@ -205,8 +205,12 @@ public struct FinanceSummaryDetailResult: Decodable {
     public var quoteType: quoteTypeDetail?
 }
 
-public struct FinanceSummaryDetailResultResponse: Decodable {
+public struct FinanceSummaryDetailResultWrapper: Decodable {
     public var result: [FinanceSummaryDetailResult]?
+}
+
+public struct FinanceSummaryDetailResultReponse: Decodable {
+    public var quoteSummary: FinanceSummaryDetailResultWrapper?
 }
 
 //{"finance":{"result":null,"error":{"code":"Unauthorized","description":"Invalid Cookie"}}}
