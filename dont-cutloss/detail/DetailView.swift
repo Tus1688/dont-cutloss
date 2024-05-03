@@ -14,15 +14,29 @@ struct DetailView: View {
     
     let ticker: Portfolio
     
+    @State var isLoading = false
+    
     @State private var data: FinanceSummaryDetailResult = FinanceSummaryDetailResult()
     
     var body: some View {
         NavigationStack {
             VStack {
-                Text("hello world")
+                if isLoading {
+                    ProgressView()
+                        .foregroundStyle(.white)
+                } else {
+                    VStack {
+                        if let trend = data.recommendationTrend?.trend {
+                            AnalystRecommendation(trend: trend)
+                                .padding()
+                        }
+                    }
+                }
             }
-            .onAppear {
-                loadData()
+            .task {
+                isLoading = true
+                await loadData()
+                isLoading = false
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
@@ -74,27 +88,14 @@ struct DetailView: View {
         }
     }
     
-    private func loadData() {
-        YFinance.fetchSummaryData(identifier: ticker.symbol ?? "", selection: [QuoteSummarySelection.supported]) { respData, err in
-            if err != nil {
-                print("error: \(err!)")
-                return
-            }
-            data = respData!
+    private func loadData() async {
+        let (fetchedData, error) = YFinance.syncFetchSummaryData(identifier: ticker.symbol ?? "", selection: [QuoteSummarySelection.supported])
+        if let error = error {
+            // TODO: show toast / alert
+            print("Error fetching data: \(error)")
+            return
         }
+        data = fetchedData!
     }
 }
 
-//#Preview {
-//    struct previewDetailView: View {
-//        let value = Portfolio(context: PersistenceController.shared.container.viewContext)
-//        value.symbol = "AAPL"
-//
-//        var body: some View {
-//            NavigationStack {
-//                DetailView(symbol: value)
-//            }
-//        }
-//    }
-//    return previewDetailView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-//}

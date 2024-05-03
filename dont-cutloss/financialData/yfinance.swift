@@ -284,4 +284,26 @@ public class YFinance {
         
         task.resume()
     }
+    
+    // async wrapper for fetch summary data
+    public class func syncFetchSummaryData(
+        identifier: String,
+        selection: [QuoteSummarySelection]
+    ) -> (FinanceSummaryDetailResult?, Error?) {
+        var retData: FinanceSummaryDetailResult?, retError: Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        self.fetchSummaryData(
+            identifier: identifier,
+            selection: selection,
+            queue: DispatchQueue.global(qos: .utility)
+        ) { data, error in
+            defer { semaphore.signal() }
+            
+            retData = data
+            retError = error
+        }
+        
+        semaphore.wait()
+        return (retData, retError)
+    }
 }

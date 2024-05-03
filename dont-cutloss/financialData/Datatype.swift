@@ -54,7 +54,8 @@ public struct Resolutions: Decodable {
  Beginning of detailed data struct
  */
 
-public struct Trend: Decodable {
+public struct Trend: Decodable, Identifiable {
+    public var id: String { period ?? ""}
     public var period: String?
     public var strongBuy: Int?
     public var buy: Int?
@@ -213,7 +214,6 @@ public struct FinanceSummaryDetailResultReponse: Decodable {
     public var quoteSummary: FinanceSummaryDetailResultWrapper?
 }
 
-//{"finance":{"result":null,"error":{"code":"Unauthorized","description":"Invalid Cookie"}}}
 public struct FinanceSummaryDetailErrorResponse: Decodable {
     public var finance: FinanceSummaryDetailErrorResult?
 }
