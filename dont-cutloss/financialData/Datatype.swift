@@ -220,10 +220,10 @@ public struct FinanceSummaryDetailErrorResponse: Decodable {
 }
 
 public struct FinanceSummaryDetailErrorResult: Decodable {
-    public var error: FinanceSummaryDetailError?
+    public var error: FinanceErrorResponse?
 }
 
-public struct FinanceSummaryDetailError: Decodable {
+public struct FinanceErrorResponse: Decodable {
     public var code: String?
     public var description: String?
 }
@@ -231,3 +231,70 @@ public struct FinanceSummaryDetailError: Decodable {
 /*
  End of detailed data struct
  */
+
+public struct FinanceStockChartData: Decodable {
+    public var chart: ChartData?
+}
+
+public struct ChartData: Decodable {
+    public var result: [ChartDataResult]
+    public var error: FinanceErrorResponse?
+}
+
+public struct ChartDataResult: Decodable {
+    public var meta: ChartDataMeta?
+    public var timestamp: [Int]?
+    public var indicators: ChartDataIndicators?
+}
+
+public struct ChartDataMeta: Decodable {
+    public var currency: String?
+    public var symbol: String?
+    public var exchangeName: String?
+    public var fullExchangeName: String?
+    public var instrumentType: String?
+    public var firstTradeDate: Int?
+    public var regularMarketTime: Int?
+    public var gmtoffset: Int?
+    public var timezone: String?
+    public var exchangeTimezoneName: String?
+    public var regularMarketPrice: Decimal?
+    public var fiftyTwoWeekHigh: Decimal?
+    public var fiftyTwoWeekLow: Decimal?
+    public var regularMarketDayHigh: Decimal?
+    public var regularMarketDayLow: Decimal?
+    public var regularMarketVolume: Int?
+    public var chartPreviousClose: Decimal?
+    public var previousClose: Decimal?
+    public var scale: Int?
+    public var priceHint: Int?
+    public var currentTradingPeriod: CurrentTradingPeriod?
+    public var dataGranularity: String?
+    public var range: String?
+    public var validRanges: [String]?
+}
+
+public struct CurrentTradingPeriod: Decodable {
+    public var pre: TradingPeriod?
+    public var regular: TradingPeriod?
+    public var post: TradingPeriod?
+}
+
+public struct TradingPeriod: Decodable {
+    public var timezone: String?
+    public var start: Int?
+    public var end: Int?
+    public var gmtoffset: Int?
+}
+
+public struct ChartDataIndicators: Decodable {
+    public var quote: [ChartDataQuote]?
+}
+
+public struct ChartDataQuote: Decodable {
+    public var close: [Decimal?]?
+    public var low: [Decimal?]?
+    public var open: [Decimal?]?
+    public var high: [Decimal?]?
+    public var volume: [Int?]?
+}

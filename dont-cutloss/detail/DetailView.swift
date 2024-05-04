@@ -17,6 +17,7 @@ struct DetailView: View {
     @State var isLoading = false
     
     @State private var data: FinanceSummaryDetailResult = FinanceSummaryDetailResult()
+    @State private var chartData: ChartDataResult = ChartDataResult()
     
     var body: some View {
         NavigationStack {
@@ -26,19 +27,22 @@ struct DetailView: View {
                         .foregroundStyle(.white)
                 } else {
                     VStack {
+                        ChartDataView(data: chartData)
+                            .padding(.bottom)
                         if let summary = data.summaryDetail {
                             SummaryDetailView(detail: summary)
-                                .padding()
+                                .padding(.bottom)
                         }
                         if let trend = data.recommendationTrend?.trend {
                             AnalystRecommendationView(trend: trend)
-                                .padding()
                         }
                     }
+                    .padding()
                 }
             }
             .task {
                 isLoading = true
+                await loadChartData()
                 await loadData()
                 isLoading = false
             }
@@ -100,6 +104,17 @@ struct DetailView: View {
             return
         }
         data = fetchedData!
+    }
+    
+    private func loadChartData() async {
+        YFinance.fetchChartData(identifier: ticker.symbol ?? "") { data, error in
+            if let error = error {
+                // TODO: show toast / alert
+                print("Error fetching chart data: \(error)")
+                return
+            }
+            chartData = data!
+        }
     }
 }
 

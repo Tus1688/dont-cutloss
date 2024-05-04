@@ -305,4 +305,70 @@ public class YFinance {
         semaphore.wait()
         return (retData, retError)
     }
+    
+    public class func fetchChartData(
+        identifier: String,
+        queue: DispatchQueue = .main,
+        callback: @escaping (ChartDataResult?, Error?) -> Void
+    ) {
+        if identifier.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            callback(nil, NSError(domain: "invalid identifier", code: 0, userInfo: nil))
+            return
+        }
+        
+        Self.prepareCredentials()
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "query1.finance.yahoo.com"
+        urlComponents.path = "/v8/finance/chart/\(identifier)"
+        Self.cacheCounter += 1
+        urlComponents.queryItems = [
+            URLQueryItem(name: "symbols", value: identifier),
+            URLQueryItem(name: "symbol", value: identifier),
+            URLQueryItem(name: "region", value: "US"),
+            URLQueryItem(name: "lang", value: "en-US"),
+            URLQueryItem(name: "includePrePost", value: "false"),
+            URLQueryItem(name: "corsDomain", value: "finance.yahoo.com"),
+            URLQueryItem(name: "interval", value: "2m"),
+            URLQueryItem(name: "range", value: "1d"),
+            URLQueryItem(name: "crumb", value: Self.crumb),
+            URLQueryItem(name: ".tsrc", value: "finance"),
+            URLQueryItem(name: "period1", value: String(Int(Date().timeIntervalSince1970))),
+            URLQueryItem(name: "period2", value: String(Int(Date().timeIntervalSince1970) + 10)),
+            URLQueryItem(name: "cachecounter", value: String(Self.cacheCounter))
+        ]
+        
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        
+        let task = session.dataTask(with: urlComponents.url!) { data, response, error in
+            if let error = error {
+                queue.async {
+                    callback(nil, error)
+                }
+            } else if let data = data {
+                let decoder = JSONDecoder()
+                do {
+                    let response = try decoder.decode(FinanceStockChartData.self, from: data)
+                    
+                    if response.chart?.error != nil {
+                        queue.async {
+                            callback(nil, NSError(domain: response.chart!.error?.description! ?? "", code: 0, userInfo: nil))
+                        }
+                    }
+                    
+                    queue.async {
+                        callback(response.chart?.result[0], nil)
+                    }
+                } catch {
+                    queue.async {
+                        callback(nil, error)
+                    }
+                }
+            }
+        }
+        
+        task.resume()
+    }
 }
