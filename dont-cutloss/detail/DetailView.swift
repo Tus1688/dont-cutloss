@@ -26,8 +26,12 @@ struct DetailView: View {
                         .foregroundStyle(.white)
                 } else {
                     VStack {
+                        if let summary = data.summaryDetail {
+                            SummaryDetailView(detail: summary)
+                                .padding()
+                        }
                         if let trend = data.recommendationTrend?.trend {
-                            AnalystRecommendation(trend: trend)
+                            AnalystRecommendationView(trend: trend)
                                 .padding()
                         }
                     }
@@ -50,7 +54,7 @@ struct DetailView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     VStack(alignment: .leading) {
-                        Text(ticker.shortName ?? "")
+                        Text(ticker.shortName?.prefix(25) ?? "")
                             .font(.callout)
                             .fontWeight(.bold)
                         HStack (spacing: 4) {

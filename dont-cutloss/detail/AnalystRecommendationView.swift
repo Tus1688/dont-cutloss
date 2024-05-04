@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-struct AnalystRecommendation: View {
+struct AnalystRecommendationView: View {
     let trend: [Trend]
     
     // This function converts the period string to month names based on the current month
@@ -29,7 +29,7 @@ struct AnalystRecommendation: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Analyst Recommendation")
-                .font(.headline)
+                .font(.subheadline)
                 .fontWeight(.bold)
             Chart(trend.reversed()) { value in
                 BarMark(
@@ -78,7 +78,7 @@ struct AnalystRecommendation: View {
             Trend(period: "-3m", strongBuy: 10, buy: 24, hold: 7, sell:1, strongSell: 0),
         ]
         var body: some View {
-            AnalystRecommendation(trend: trend)
+            AnalystRecommendationView(trend: trend)
         }
     }
     return TrendViewPreview()

@@ -83,7 +83,8 @@ public struct summaryDetail: Decodable {
     public var regularMarketOpen: ratioChunkDetail?
     public var regularMarketDayLow: ratioChunkDetail?
     public var regularMarketDayHigh: ratioChunkDetail?
-    public var devidedRate: ratioChunkDetail?
+    public var dividendRate: ratioChunkDetail?
+    public var dividendYield: ratioChunkDetail?
     public var exDividendDate: ratioChunkDetail?
     public var payoutRatio: ratioChunkDetail?
     public var fiveYearAvgDividendYield: ratioChunkDetail?

@@ -294,8 +294,7 @@ public class YFinance {
         let semaphore = DispatchSemaphore(value: 0)
         self.fetchSummaryData(
             identifier: identifier,
-            selection: selection,
-            queue: DispatchQueue.global(qos: .utility)
+            selection: selection
         ) { data, error in
             defer { semaphore.signal() }
             
