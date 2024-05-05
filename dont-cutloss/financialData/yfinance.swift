@@ -308,12 +308,55 @@ public class YFinance {
     
     public class func fetchChartData(
         identifier: String,
+        range: ChartDataRange = .oneDay,
         queue: DispatchQueue = .main,
         callback: @escaping (ChartDataResult?, Error?) -> Void
     ) {
         if identifier.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
             callback(nil, NSError(domain: "invalid identifier", code: 0, userInfo: nil))
             return
+        }
+        
+        var interval: String {
+            switch range {
+            case .oneDay:
+                return "1m"
+            case .fiveDay:
+                return "5m"
+            case .oneMonth, .threeMonth, .sixMonth, .oneYear, .twoYear, .yearToDate:
+                return "1d"
+            case .fiveYear:
+                return "1wk"
+            case .max, .tenYear:
+                return "1mo"
+            }
+        }
+        
+        var period1: String {
+            switch range {
+            case .oneDay:
+                return String(Int(Date().timeIntervalSince1970) - 86400)
+            case .fiveDay:
+                return String(Int(Date().timeIntervalSince1970) - 432000)
+            case .oneMonth:
+                return String(Int(Date().timeIntervalSince1970) - 2592000)
+            case .threeMonth:
+                return String(Int(Date().timeIntervalSince1970) - 7776000)
+            case .sixMonth:
+                return String(Int(Date().timeIntervalSince1970) - 15552000)
+            case .yearToDate:
+                return String(Int(Date().timeIntervalSince1970) - 15768000)
+            case .oneYear:
+                return String(Int(Date().timeIntervalSince1970) - 31536000)
+            case .twoYear:
+                return String(Int(Date().timeIntervalSince1970) - 63072000)
+            case .fiveYear:
+                return String(Int(Date().timeIntervalSince1970) - 157680000)
+            case .tenYear:
+                return String(Int(Date().timeIntervalSince1970) - 315360000)
+            case .max:
+                return "0"
+            }
         }
         
         Self.prepareCredentials()
@@ -329,12 +372,14 @@ public class YFinance {
             URLQueryItem(name: "lang", value: "en-US"),
             URLQueryItem(name: "includePrePost", value: "false"),
             URLQueryItem(name: "corsDomain", value: "finance.yahoo.com"),
-            URLQueryItem(name: "interval", value: "2m"),
-            URLQueryItem(name: "range", value: "1d"),
+            URLQueryItem(name: "interval", value: interval),
+            URLQueryItem(name: "range", value: range.rawValue),
             URLQueryItem(name: "crumb", value: Self.crumb),
             URLQueryItem(name: ".tsrc", value: "finance"),
-            URLQueryItem(name: "period1", value: String(Int(Date().timeIntervalSince1970))),
-            URLQueryItem(name: "period2", value: String(Int(Date().timeIntervalSince1970) + 10)),
+//            URLQueryItem(name: "period1", value: String(Int(Date().timeIntervalSince1970))),
+//            URLQueryItem(name: "period2", value: String(Int(Date().timeIntervalSince1970) + 10)),
+            URLQueryItem(name: "period1", value: period1),
+            URLQueryItem(name: "period2", value: String(Int(Date().timeIntervalSince1970))),
             URLQueryItem(name: "cachecounter", value: String(Self.cacheCounter))
         ]
         

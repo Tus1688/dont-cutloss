@@ -18,6 +18,7 @@ struct DetailView: View {
     
     @State private var data: FinanceSummaryDetailResult = FinanceSummaryDetailResult()
     @State private var chartData: ChartDataResult = ChartDataResult()
+    @State private var chartRange: ChartDataRange = ChartDataRange.oneDay
     
     var body: some View {
         NavigationStack {
@@ -26,18 +27,28 @@ struct DetailView: View {
                     ProgressView()
                         .foregroundStyle(.white)
                 } else {
-                    VStack {
-                        ChartDataView(data: chartData)
+                    ScrollView {
+                        VStack {
+                            VStack(spacing: 16) {
+                                ChartDataView(data: chartData)
+                                ChartRangeSwitchView(range: $chartRange)
+                                    .onChange(of: chartRange) {
+                                        Task {
+                                            await loadChartData()
+                                        }
+                                    }
+                            }
                             .padding(.bottom)
-                        if let summary = data.summaryDetail {
-                            SummaryDetailView(detail: summary)
-                                .padding(.bottom)
+                            if let summary = data.summaryDetail {
+                                SummaryDetailView(detail: summary)
+                                    .padding(.bottom)
+                            }
+                            if let trend = data.recommendationTrend?.trend {
+                                AnalystRecommendationView(trend: trend)
+                            }
                         }
-                        if let trend = data.recommendationTrend?.trend {
-                            AnalystRecommendationView(trend: trend)
-                        }
+                        .padding()
                     }
-                    .padding()
                 }
             }
             .task {
@@ -107,7 +118,7 @@ struct DetailView: View {
     }
     
     private func loadChartData() async {
-        YFinance.fetchChartData(identifier: ticker.symbol ?? "") { data, error in
+        YFinance.fetchChartData(identifier: ticker.symbol ?? "", range: chartRange) { data, error in
             if let error = error {
                 // TODO: show toast / alert
                 print("Error fetching chart data: \(error)")

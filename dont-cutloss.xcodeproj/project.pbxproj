@@ -26,6 +26,7 @@
 		CE42EC8C2BE483DB0025779D /* AnalystRecommendationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC8B2BE483DB0025779D /* AnalystRecommendationView.swift */; };
 		CE42EC8E2BE602600025779D /* SummaryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC8D2BE602600025779D /* SummaryDetailView.swift */; };
 		CE42EC902BE68DBF0025779D /* ChartDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC8F2BE68DBF0025779D /* ChartDataView.swift */; };
+		CE42EC922BE7433E0025779D /* ChartRangeSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE42EC912BE7433E0025779D /* ChartRangeSwitchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		CE42EC8B2BE483DB0025779D /* AnalystRecommendationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalystRecommendationView.swift; sourceTree = "<group>"; };
 		CE42EC8D2BE602600025779D /* SummaryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryDetailView.swift; sourceTree = "<group>"; };
 		CE42EC8F2BE68DBF0025779D /* ChartDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartDataView.swift; sourceTree = "<group>"; };
+		CE42EC912BE7433E0025779D /* ChartRangeSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartRangeSwitchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 				CE42EC8B2BE483DB0025779D /* AnalystRecommendationView.swift */,
 				CE42EC8D2BE602600025779D /* SummaryDetailView.swift */,
 				CE42EC8F2BE68DBF0025779D /* ChartDataView.swift */,
+				CE42EC912BE7433E0025779D /* ChartRangeSwitchView.swift */,
 			);
 			path = detail;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				CE42EC8E2BE602600025779D /* SummaryDetailView.swift in Sources */,
 				CE42EC7E2BDF2D240025779D /* Datatype.swift in Sources */,
 				CE42EC742BDB5D940025779D /* AddNewItem.swift in Sources */,
+				CE42EC922BE7433E0025779D /* ChartRangeSwitchView.swift in Sources */,
 				CE42EC872BE09C2C0025779D /* config.swift in Sources */,
 				CE42EC902BE68DBF0025779D /* ChartDataView.swift in Sources */,
 				CE42EC4E2BDB56FF0025779D /* Persistence.swift in Sources */,

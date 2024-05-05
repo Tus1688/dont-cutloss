@@ -25,11 +25,13 @@ struct ChartDataView: View {
     }
 
     private var low: Decimal {
-        data.meta?.regularMarketDayLow ?? 0
+        // iterate the chartData to find the lowest value
+        chartData.map { $0.y }.min() ?? 0
     }
     
     private var high: Decimal {
-        data.meta?.regularMarketDayHigh ?? 0
+        // iterate the chartData to find the highest value
+        chartData.map { $0.y }.max() ?? 0
     }
     
     private var bullish: Bool {
