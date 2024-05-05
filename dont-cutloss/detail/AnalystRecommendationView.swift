@@ -27,7 +27,7 @@ struct AnalystRecommendationView: View {
     private let barWidth = 30
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Analyst Recommendation")
                 .font(.subheadline)
                 .fontWeight(.bold)
@@ -63,8 +63,14 @@ struct AnalystRecommendationView: View {
                 )
                 .foregroundStyle(.green)
             }
+            .chartYAxis(.hidden)
+            .chartXAxis {
+                AxisMarks(position: .bottom) { _ in
+                    AxisValueLabel()
+                }
+            }
             .chartLegend(.visible)
-            .frame(height: 150)
+            .frame(height: 120)
         }
     }
 }

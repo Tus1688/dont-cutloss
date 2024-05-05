@@ -28,7 +28,7 @@ struct DetailView: View {
                         .foregroundStyle(.white)
                 } else {
                     ScrollView {
-                        VStack {
+                        VStack(spacing: 24) {
                             VStack(spacing: 16) {
                                 ChartDataView(data: chartData)
                                 ChartRangeSwitchView(range: $chartRange)
