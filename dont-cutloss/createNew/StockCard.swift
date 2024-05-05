@@ -10,24 +10,32 @@ import SwiftUI
 struct StockCard: View {
     public var result: FinanceQuoteSearchResult
     
+    private var sector: String {
+        if result.sector?.isEmpty == true {
+            return result.quoteType?.capitalized ?? ""
+        }
+        return result.sector ?? ""
+    }
+    
     var body: some View {
-        HStack {
-            Text(result.symbol?.prefix(7) ?? "")
-                .font(.title3)
-                .fontWeight(.bold)
-            VStack (alignment: .leading){
-                if result.sector != nil {
-                    Text(result.sector ?? "")
+        HStack(alignment: .center) {
+            VStack (alignment: .leading) {
+                if sector != "" {
+                    Text(sector)
+                        .font(.caption2)
+                        .foregroundStyle(.gray)
                 }
                 if result.shortname != nil {
                     Text(result.shortname ?? "")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
                 }
             }
-            .font(.caption2)
             Spacer()
             VStack (alignment: .trailing){
                 if result.quoteType != nil {
                     Text(result.quoteType ?? "")
+                        .foregroundStyle(result.quoteType == "EQUITY" ? .blue : .orange)
                 }
                 if result.exchange != nil {
                     Text(result.exchange ?? "")

@@ -22,16 +22,23 @@ struct ContentView: View {
         NavigationStack {
             List {
                 ForEach(items) { item in
-                    NavigationLink {
-                        DetailView(ticker: item)
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                        Text(item.symbol!)
-                            .fontWeight(.bold)
+                    StockCard(result: FinanceQuoteSearchResult(
+                        symbol: item.symbol,
+                        shortname: item.shortName,
+                        quoteType: item.quoteType,
+                        exchange: item.exchange,
+                        sector: item.sector
+                    ))
+                    .overlay {
+                        NavigationLink(destination: DetailView(ticker: item), label: {
+                            EmptyView()
+                        })
+                        .opacity(0)
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
+            .listStyle(.plain)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -44,6 +51,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .navigationTitle("Portfolio")
         }
         .sheet(isPresented: $createSheetVisible, content: {
             NavigationStack {
@@ -67,13 +75,6 @@ struct ContentView: View {
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
