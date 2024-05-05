@@ -13,8 +13,8 @@ struct FillInfo: View {
     @Binding var isPresented: Bool
     let result: FinanceQuoteSearchResult
     
-    @State private var quantity: Decimal = 0
-    @State private var avgPrice: Decimal = 0
+    @State private var quantityInput: String = ""
+    @State private var avgPriceInput: String = ""
     
     var body: some View {
         NavigationStack {
@@ -30,18 +30,18 @@ struct FillInfo: View {
                     Form {
                         Section(header: Text("Fill in the information")) {
                             HStack {
-                                if !quantity.isNaN {
+                                if !quantityInput.isEmpty {
                                     Text("Quantity")
                                 }
-                                TextField("Quantity", value: $quantity, formatter: NumberFormatter())
-                                    .multilineTextAlignment(quantity.isNaN ? .leading : .trailing)
+                                TextField("Quantity", text: $quantityInput)
+                                    .multilineTextAlignment(quantityInput.isEmpty ? .leading : .trailing)
                             }
                             HStack {
-                                if !avgPrice.isNaN {
+                                if !avgPriceInput.isEmpty {
                                     Text("Average Price")
                                 }
-                                TextField("Average Price", value: $avgPrice, formatter: NumberFormatter())
-                                    .multilineTextAlignment(avgPrice.isNaN ? .leading : .trailing)
+                                TextField("Average Price", text: $avgPriceInput)
+                                    .multilineTextAlignment(avgPriceInput.isEmpty ? .leading : .trailing)
                             }
                         }
                     }
@@ -60,6 +60,20 @@ struct FillInfo: View {
     }
     
     private func saveData() {
+        var quantity: Decimal {
+            if let quantity = Decimal(string: quantityInput) {
+                return quantity
+            }
+            return 0
+        }
+        
+        var avgPrice: Decimal {
+            if let avgPrice = Decimal(string: avgPriceInput) {
+                return avgPrice
+            }
+            return 0
+        }
+        
         let newPortfolioItem = Portfolio(context: viewContext)
         newPortfolioItem.id = UUID()
         newPortfolioItem.symbol = result.symbol ?? ""

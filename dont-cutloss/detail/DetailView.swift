@@ -28,7 +28,7 @@ struct DetailView: View {
                         .foregroundStyle(.white)
                 } else {
                     ScrollView {
-                        VStack(spacing: 24) {
+                        VStack(alignment: .leading, spacing: 24) {
                             VStack(spacing: 16) {
                                 ChartDataView(data: chartData)
                                 ChartRangeSwitchView(range: $chartRange)
@@ -39,6 +39,8 @@ struct DetailView: View {
                                     }
                             }
                             .padding(.bottom)
+                            OwnershipCardView(portfolio: ticker)
+                                .padding(.bottom)
                             if let summary = data.summaryDetail {
                                 SummaryDetailView(detail: summary)
                                     .padding(.bottom)
@@ -52,6 +54,7 @@ struct DetailView: View {
                 }
             }
             .task {
+                print(ticker)
                 isLoading = true
                 await loadChartData()
                 await loadData()
