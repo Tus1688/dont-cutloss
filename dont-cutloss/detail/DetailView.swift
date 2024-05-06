@@ -47,6 +47,10 @@ struct DetailView: View {
                             }
                             if let trend = data.recommendationTrend?.trend {
                                 AnalystRecommendationView(trend: trend)
+                                    .padding(.bottom)
+                            }
+                            if let profile = data.summaryProfile {
+                                SummaryProfileView(data: profile)
                             }
                         }
                         .padding()
@@ -54,7 +58,6 @@ struct DetailView: View {
                 }
             }
             .task {
-                print(ticker)
                 isLoading = true
                 await loadChartData()
                 await loadData()
@@ -96,7 +99,7 @@ struct DetailView: View {
                     Button(action: {
                         print("edit")
                     }) {
-                        Image(systemName: "pencil")
+                        Image(systemName: "square.and.pencil")
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {

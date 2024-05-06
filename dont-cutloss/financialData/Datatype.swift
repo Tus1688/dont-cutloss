@@ -178,7 +178,7 @@ public struct summaryProfileDetail: Decodable {
     public var phone: String?
     public var website: String?
     public var industry: String?
-    public var sectory: String?
+    public var sector: String?
     public var longBusinessSummary: String?
     public var fullTimeEmployees: Int?
     public var irWebsite: String?
