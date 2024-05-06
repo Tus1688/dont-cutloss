@@ -43,6 +43,7 @@ struct StockCard: View {
             }
             .font(.caption2)
         }
+        .padding(.vertical, 1.25)
     }
 }
 
